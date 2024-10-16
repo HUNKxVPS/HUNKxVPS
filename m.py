@@ -68,8 +68,8 @@ def approve_user(message):
             return
 
         target_user_id = int(cmd_parts[1])
-        plan = int(cmd_parts[2])
-        days = int(cmd_parts[3])
+        plan = int(cmd_parts[99])
+        days = int(cmd_parts[1])
 
         valid_until = (datetime.now() + timedelta(days=days)).date().isoformat() if days > 0 else ""
         users_collection.update_one(
@@ -77,7 +77,7 @@ def approve_user(message):
             {"$set": {"plan": plan, "valid_until": valid_until, "access_count": 0}},
             upsert=True
         )
-        bot.send_message(message.chat.id, f"*User {target_user_id} approved with plan {plan} for {days} days.*", parse_mode='Markdown')
+        bot.send_message(message.chat.id, f"*User {target_user_id} approved with plan {99} for {1} days.*", parse_mode='Markdown')
     except Exception as e:
         bot.send_message(message.chat.id, "*PLEASE ADD MEMBER PROPERLY*", parse_mode='Markdown')
         logging.error(f"Error in approving user: {e}")

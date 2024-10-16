@@ -1,21 +1,16 @@
 import telebot
 import logging
 import subprocess
-from pymongo import MongoClient
 from datetime import datetime, timedelta
 import certifi
 from telebot.types import ReplyKeyboardMarkup, KeyboardButton
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 TOKEN = '7222981465:AAHQKkZXn5jCqkMize6_mqoaU9KCNNBnLJo'
-MONGO_URI = 'mongodb+srv://admin:kpR4ObsewTySq48I@test.zeqrmgb.mongodb.net/test_db?retryWrites=true&w=majority'
 CHANNEL_ID = -1002090155968
 ADMIN_IDS = [984245153]
 
 
-client = MongoClient(MONGO_URI, tlsCAFile=certifi.where())
-db = client['soul']
-users_collection = db.users
 bot = telebot.TeleBot(TOKEN)
 blocked_ports = [8700, 20000, 443, 17500, 9031, 20002, 20001]
 user_attack_details = {}

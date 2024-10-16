@@ -61,51 +61,6 @@ def approve_user(message):
         bot.send_message(message.chat.id, "*You are not authorized to use this command*", parse_mode='Markdown')
         return
 
-    try:
-        cmd_parts = message.text.split()
-        if len(cmd_parts) != 4:
-            bot.send_message(message.chat.id, "*Invalid command format. Use /approve <user_id> <plan> <days>*", parse_mode='Markdown')
-            return
-
-        target_user_id = int(cmd_parts[1])
-        plan = int(cmd_parts[99])
-        days = int(cmd_parts[1])
-
-        valid_until = (datetime.now() + timedelta(days=days)).date().isoformat() if days > 0 else ""
-        users_collection.update_one(
-            {"user_id": target_user_id},
-            {"$set": {"plan": plan, "valid_until": valid_until, "access_count": 0}},
-            upsert=True
-        )
-        bot.send_message(message.chat.id, f"*User {target_user_id} approved with plan {99} for {1} days.*", parse_mode='Markdown')
-    except Exception as e:
-        bot.send_message(message.chat.id, "*PLEASE ADD MEMBER PROPERLY*", parse_mode='Markdown')
-        logging.error(f"Error in approving user: {e}")
-
-
-@bot.message_handler(commands=['disapprove'])
-def disapprove_user(message):
-    if not is_user_admin(message.from_user.id, message.chat.id):
-        bot.send_message(message.chat.id, "*You are not authorized to use this command*", parse_mode='Markdown')
-        return
-
-    try:
-        cmd_parts = message.text.split()
-        if len(cmd_parts) != 2:
-            bot.send_message(message.chat.id, "*Invalid command format. Use /disapprove <user_id>*", parse_mode='Markdown')
-            return
-
-        target_user_id = int(cmd_parts[1])
-        users_collection.update_one(
-            {"user_id": target_user_id},
-            {"$set": {"plan": 0, "valid_until": "", "access_count": 0}},
-            upsert=True
-        )
-        bot.send_message(message.chat.id, f"*User {target_user_id} disapproved and reverted to free.*", parse_mode='Markdown')
-    except Exception as e:
-        bot.send_message(message.chat.id, "*PLEASE ADD MEMBER PROPERLY*", parse_mode='Markdown')
-        logging.error(f"Error in disapproving user: {e}")
-
 @bot.message_handler(commands=['Attack'])
 def attack_command(message):
     if not check_user_approval(message.from_user.id):

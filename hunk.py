@@ -199,7 +199,7 @@ def start_bgmi_reply(message, target, port, time):
     user_info = message.from_user
     username = user_info.username if user_info.username else user_info.first_name
     
-    response = f"ATTACK HAS BEEN STARTED \n\nIP{target}\nPORT{port}\nTIME{time}\n\nUxB MOTHERCHOD"
+    response = f"𝐀𝐓𝐓𝐀𝐂𝐊 𝐇𝐀𝐒 𝐁𝐄𝐄𝐍 𝐒𝐓𝐀𝐑𝐓𝐄𝐃\n\n𝐈𝐏 - {target}\n𝐏𝐎𝐑𝐓 - {port}\n𝐓𝐈𝐌𝐄 - {time}\n\nᴜxʙ ᴍᴇʀᴇ ʟᴀᴡʀᴇ ᴘᴇ"
     bot.reply_to(message, response)
 
     # Dictionary to store the last time each user ran the /bgmi command
@@ -236,7 +236,7 @@ def handle_bgmi(message):
                 start_bgmi_reply(message, target, port, time)  # Call start_bgmi_reply function
                 full_command = f"./bgmi {target} {port} {time} 200"
                 subprocess.run(full_command, shell=True)
-                response = f"ATTACK COMPLETE"
+                response = f"𝐀𝐓𝐓𝐀𝐂𝐊 𝐂𝐎𝐌𝐏𝐋𝐄𝐓𝐄"
         else:
             response = "Usage :- /bgmi <target> <port> <time>"  # Updated command syntax
     else:

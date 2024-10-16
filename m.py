@@ -55,7 +55,7 @@ def send_main_buttons(chat_id):
     bot.send_message(chat_id, "*Choose an action:*", reply_markup=markup, parse_mode='Markdown')
 
 
-@bot.message_handler(commands=['approve'])
+@bot.message_handler(commands=['add'])
 def add_user(message):
     user_id = str(message.chat.id)
     if user_id in admin_id:

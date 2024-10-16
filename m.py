@@ -55,26 +55,30 @@ def send_main_buttons(chat_id):
     bot.send_message(chat_id, "*Choose an action:*", reply_markup=markup, parse_mode='Markdown')
 
 
-@bot.message_handler(commands=['add'])
-def add_user(message):
-    user_id = str(message.chat.id)
-    if user_id in admin_id:
-        command = message.text.split()
-        if len(command) > 1:
-            user_to_add = command[1]
-            if user_to_add not in allowed_user_ids:
-                allowed_user_ids.append(user_to_add)
-                with open(USER_FILE, "a") as file:
-                    file.write(f"{user_to_add}\n")
-                response = f"User {user_to_add} Added Successfully ."
-            else:
-                response = "User already exists ."
-        else:
-            response = "Please specify a user ID to add."
-    else:
-        response = "ONLY OWNER CAN USE."
+@bot.message_handler(commands=['approve'])
+def approve_user(message):
+    if not is_user_admin(message.from_user.id, message.chat.id):
+        bot.send_message(message.chat.id, "*You are not authorized to use this command*", parse_mode='Markdown')
+        return
 
-    bot.reply_to(message, response)
+    try:
+        cmd_parts = message.text.split()
+        if len(cmd_parts) != 4:
+            bot.send_message(message.chat.id, "*Invalid command format. Use /approve <user_id>*", parse_mode='Markdown')
+            return
+
+        target_user_id = int(cmd_parts[1])
+
+        valid_until = (datetime.now() + timedelta(days=days)).date().isoformat() if days > 0 else ""
+        users_collection.update_one(
+            {"user_id": target_user_id},
+            
+            upsert=True
+        )
+        bot.send_message(message.chat.id, f"*User {target_user_id} approved.*", parse_mode='Markdown')
+    except Exception as e:
+        bot.send_message(message.chat.id, "*PLEASE ADD MEMBER PROPERLY*", parse_mode='Markdown')
+        logging.error(f"Error in approving user: {e}")
 
 
 @bot.message_handler(commands=['disapprove'])
